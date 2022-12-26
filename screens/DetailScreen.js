@@ -11,6 +11,7 @@ function DetailScreen({ route, navigation }) {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: mealInfo.title,
+      //dùng trong đây để chạy đc mấy cái hàm trên ko thì dùng trên app.js cũg đc
       headerRight: () => <IconButton onPress={headerRightButtonHandler} />,
     });
   }, []);
