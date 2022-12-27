@@ -11,6 +11,9 @@ import CategoryScreen from "./screens/CategoryScreen";
 import DetailScreen from "./screens/DetailScreen";
 import MealOverview from "./screens/MealOverview";
 import FavoritesScreen from "./screens/FavoritesScreen";
+import FavoriteProvider from "./store/context/favoritesContex";
+import { Provider } from "react-redux";
+import store from "./store/redux/store";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,7 +33,7 @@ function DrawerNavigator() {
     >
       <Drawer.Screen
         options={{
-          title : "All Categories",
+          title: "All Categories",
           drawerIcon: ({ color, size }) => (
             <Ionicons name="list" color={color} size={size} />
           ),
@@ -54,34 +57,38 @@ function DrawerNavigator() {
 export default function App() {
   return (
     <>
-      <NavigationContainer>
-        <Stack.Navigator
-          screenOptions={{
-            headerStyle: { backgroundColor: "red" },
-            headerTintColor: "white",
-            // contentStyle: { backgroundColor : 'black'}
-          }}
-        >
-          <Stack.Screen
-            options={{ title: "All Categories", headerShown: false }}
-            name="Drawer"
-            component={DrawerNavigator}
-          />
-          <Stack.Screen
-            // options={{ title: "All Meals" }}
-            //-Cách 1 sử dụng trực tiếp trong screen cách 2 là sử dụng setOption trong component MealOverview
-            // options={({ route, navigation }) => {
-            //   const catId = route.params.categoryId;
-            //   return {
-            //     title: catId,
-            //   };
-            // }}
-            name="MealOverviewScreen"
-            component={MealOverview}
-          />
-          <Stack.Screen name="DetailMeal" component={DetailScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      {/* <FavoriteProvider> */}
+      <Provider store={store}>
+        <NavigationContainer>
+          <Stack.Navigator
+            screenOptions={{
+              headerStyle: { backgroundColor: "red" },
+              headerTintColor: "white",
+              // contentStyle: { backgroundColor : 'black'}
+            }}
+          >
+            <Stack.Screen
+              options={{ title: "All Categories", headerShown: false }}
+              name="Drawer"
+              component={DrawerNavigator}
+            />
+            <Stack.Screen
+              // options={{ title: "All Meals" }}
+              //-Cách 1 sử dụng trực tiếp trong screen cách 2 là sử dụng setOption trong component MealOverview
+              // options={({ route, navigation }) => {
+              //   const catId = route.params.categoryId;
+              //   return {
+              //     title: catId,
+              //   };
+              // }}
+              name="MealOverviewScreen"
+              component={MealOverview}
+            />
+            <Stack.Screen name="DetailMeal" component={DetailScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </Provider>
+      {/* </FavoriteProvider> */}
       <StatusBar style="light" />
     </>
   );

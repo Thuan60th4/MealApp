@@ -1,20 +1,42 @@
-import { useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 import IconButton from "../components/IconButton";
 import List from "../components/List";
+import { FavoriteContext } from "../store/context/favoritesContex";
+import { addFavoriteMeal, removeFavoriteMeal } from "../store/redux/favorite";
 
 function DetailScreen({ route, navigation }) {
   const mealInfo = route.params.meal;
-  const headerRightButtonHandler = () => {
-    console.log("Pressed!");
-  };
+
+  const listFavId = useSelector((state) => state.favoritesMeals.ids);
+  const dispatch = useDispatch();
+  // const { listFavId, addFavoriteMeal, removeFavoriteMeal } =
+  //   useContext(FavoriteContext);
+
+  const favoriteState = listFavId.includes(mealInfo.id);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: mealInfo.title,
       //dùng trong đây để chạy đc mấy cái hàm trên ko thì dùng trên app.js cũg đc
-      headerRight: () => <IconButton onPress={headerRightButtonHandler} />,
+      headerRight: () => (
+        <IconButton
+          onPress={
+            favoriteState
+              // với useContex của react
+                // ? () => removeFavoriteMeal(mealInfo.id)
+                // : () => addFavoriteMeal(mealInfo.id)
+                // với redux
+               ? () => dispatch(removeFavoriteMeal(mealInfo.id))
+              : () => dispatch(addFavoriteMeal(mealInfo.id))
+          }
+          name={favoriteState ? "heart" : "heart-outline"}
+          color="white"
+        />
+      ),
     });
-  }, []);
+  }, [listFavId]);
   return (
     <ScrollView style={styles.container}>
       <Image source={{ uri: mealInfo.imageUrl }} style={styles.image} />
